@@ -1,0 +1,9 @@
+[
+  {
+      "Action": [
+          "bedrock:*"
+      ],
+      "Resource": ["*"],
+      "Effect": "Allow"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/rag": {
+      "name": "/rag",
+      "lambdaFunction": "bedrockRagFunction",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
