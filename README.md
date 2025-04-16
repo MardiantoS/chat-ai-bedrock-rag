@@ -1,70 +1,145 @@
-# Getting Started with Create React App
+# AI Chat Web App with Bedrock RAG
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple web application that provides Generative AI chat functionality using Amazon Bedrock with Retrieval-Augmented Generation (RAG) capabilities through Bedrock Knowledge Base.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This project implements a conversational AI interface that can retrieve information from a knowledge base to provide more accurate and contextual responses. The application consists of:
 
-### `npm start`
+- **Frontend**: Web interface hosted on AWS Amplify using ReactJS
+- **Backend**: API Gateway and Lambda function (Python)
+- **AI Services**: Amazon Bedrock for FM access and Knowledge Base for RAG capabilities
+- **Vector Database**: Amazon OpenSearch Serverless
+- **Data Source**: Amazon S3 for data source storage
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Architecture Diagram
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![Bedrock Chat RAG Architecture Diagram](images/chat-ai-bedrock-rag-architecture-diagram.png)
 
-### `npm test`
+## Project Structure
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+claude-chat-app/
+├── amplify/                                    # AWS Amplify configuration and backend code
+│   └── backend/
+│       └── function/                           # Lambda function code
+│           └──bedrockRagFunction/src/index.py  # Edit the knowledge base ID in this file
+├── prerequisites/
+│   ├── data/                                   # Local data source file for knowledge base   
+│   ├── create_bedrock_kb.py                    # Script to create Bedrock Knowledge Base
+│   ├── requirements.txt                        # Python modules needed
+│   └── README.md                               # Instructions for the prerequisites
+├── src/
+│   ├── App.js                                  # Main application component
+│   ├── App.css                                 # Application styles
+│   └── index.js                                # Application entry point
+├── package.json                                # NPM dependencies
+└── README.md                                   # Project documentation (this README file)
+```
 
-### `npm run build`
+## Getting Started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Clone the Repository
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+# Clone this repository
+git clone https://github.com/MardiantoS/chat-ai-bedrock-rag.git
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Navigate to the project directory
+cd chat-ai-bedrock-rag
+```
 
-### `npm run eject`
+## Prerequisites
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- AWS Account with appropriate permissions
+- AWS CLI configured with access and secret keys
+- AWS Amplify package
+- Python 3.9 or higher
+- Node.js and npm (for the frontend)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Setup Instructions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 1. Knowledge Base Setup
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Before deploying the main application, you need to set up the Knowledge Base:
 
-## Learn More
+1. Navigate to the `prerequisites` directory
+2. Follow the README instructions within the directory
+3. Note the Knowledge Base ID that is generated from the script
+4. Edit `amplify/backend/function/bedrockRagFunction/src/index.py` and update the Knowledge Based ID placeholder with the one generated in the previous step 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 2. Install all Node packages
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Install Amplify CLI if you haven't already
+```bash
+npm install -g @aws-amplify/cli
+``` 
 
-### Code Splitting
+2. Install dependency packages:
+```
+npm install
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 3. Setup the backend: API Gateway and Lambda
 
-### Analyzing the Bundle Size
+1. Deploy the backend services:
+```bash
+amplify push
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 4. Run test locally (optional, but recommended)
 
-### Making a Progressive Web App
+1. Run the app in the development mode.
+```bash
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+2. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 5. Frontend Deployment with AWS Amplify
+Once your local test is successful, you can deploy the frontend.
+If you're running it for the first, run 
 
-### Deployment
+ - Add hosting to your Amplify project:
+   ```bash
+   amplify add hosting
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+ - Choose your hosting options:
+   ```
+   ? Select the plugin module to execute: Hosting with Amplify Console
+   ? Choose a type: Manual deployment
+   ```
 
-### `npm run build` fails to minify
+ - Deploy your application:
+   ```bash
+   amplify publish
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Usage
+
+1. Navigate to the deployed Amplify URL in your web browser
+2. Start a conversation in the chat interface
+3. You can ask questions about JPMorgan Cahse shareholder and financial highlight reports for 2023 and 2024, and the application will use Retrieval-Augmented Generation (RAG) capability from the Amazon Bedrock Knowledge Base to provide more accurate and contextual responses
+
+### Sample Questions
+Here are some example questions you can ask:
+
+- "What was net income per share in 2022, 2023, and 2024?"
+- "What are the significant challenges in 2024?"
+- "When did Jamie Dimon start as CEO of BankOne?"
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Citations
+
+If you use this code in your projects or research, please include the following citation:
+
+> Mardianto Hadiputro. (2025). AI Chat Application with Amazon Bedrock RAG. GitHub. https://github.com/MardiantoS/chat-ai-bedrock-rag
+
+## Acknowledgments
+
+- The prerequisite script is based on the RAG examples from [Amazon Bedrock Workshop | Knowledge Bases and RAG](https://github.com/aws-samples/amazon-bedrock-workshop/tree/75aa73f60903f85bd0c7abc84fa6ff85c0789105/02_Knowledge_Bases_and_RAG)
